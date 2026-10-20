@@ -1,4 +1,4 @@
-import type { AuthSession, AuthUser, LoginCredentials } from './types';
+import type { AuthSession, AuthUser, LoginCredentials, SignUpFormData } from './types';
 
 const API_BASE = '/api';
 
@@ -23,4 +23,18 @@ export async function loginRequest({ username, password }: LoginCredentials): Pr
   }
 
   return { token, user: (await userResponse.json()) as AuthUser };
+}
+
+export async function signUpRequest(signUpData: SignUpFormData): Promise<AuthSession> {
+  const response = await fetch(`${API_BASE}/auth/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(signUpData),
+  });
+
+  if (!response.ok) {
+    throw new Error('Sign up failed');
+  }
+
+  return response.json() as Promise<AuthSession>;
 }

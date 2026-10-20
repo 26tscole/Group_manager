@@ -1,11 +1,12 @@
 import { createContext, useState, type ReactNode } from 'react';
-import { loginRequest } from './api';
-import type { AuthUser, LoginCredentials } from './types';
+import { loginRequest, signUpRequest } from './api';
+import type { AuthUser, LoginCredentials, SignUpFormData } from './types';
 
 type AuthContextValue = {
   user: AuthUser | null;
   token: string | null;
   login: (credentials: LoginCredentials) => Promise<void>;
+  signUp: (signUpData: SignUpFormData) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -25,13 +26,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUser(session.user);
   }
 
+  async function signUp(signUpData: SignUpFormData) {
+    const session = await signUpRequest(signUpData);
+    setToken(session.token);
+    setUser(session.user);
+  }
+
   async function logout() {
     setToken(null);
     setUser(null);
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, signUp, logout }}>
       {children}
     </AuthContext.Provider>
   );

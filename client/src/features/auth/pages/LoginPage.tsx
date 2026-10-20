@@ -1,8 +1,9 @@
 import { useState, type SubmitEvent } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { Fieldset, TextInput, Button, Center } from '@mantine/core';
-
+import { TextInput } from '@mantine/core';
+import { AuthForm } from '../components/AuthForm';
+import { notifications } from '@mantine/notifications';
 
 export function LoginPage() {
   const { login, user } = useAuth();
@@ -23,7 +24,9 @@ export function LoginPage() {
       });
       navigate('/dashboard', { replace: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      const message = err instanceof Error ? err.message : 'Sign up failed';
+      setError(message);
+      notifications.show({ title: 'Error', message, color: 'red' });
     } finally {
       setSubmitting(false);
     }
@@ -34,42 +37,39 @@ export function LoginPage() {
   }
 
   return (
-    <main className="page-shell">
-      <section className="auth-card" aria-labelledby="login-title">
-        <Center>
-          <h1 id="login-title">Welcome to Group Manager</h1>
-        </Center>
-        <Center>
-          <form className="login-form" onSubmit={handleSubmit}>
-            <Fieldset legend="Login Information">
-              <TextInput
-                id="username"
-                name="username"
-                type="text"
-                label="Username"
-                placeholder="Enter your username"
-                autoComplete="username"
-                required
-              />
-              <TextInput
-                id="password"
-                name="password"
-                type="password"
-                label="Password"
-                placeholder="Enter any password"
-                autoComplete="current-password"
-                required
-              />
-            </Fieldset>
-
-            {error && <p className="form-error" role="alert">{error}</p>}
-
-            <Button type="submit" disabled={submitting}>
-              {submitting ? 'Signing in…' : 'Sign in'}
-            </Button>
-          </form>
-        </Center>
-      </section>
-    </main>
+    <AuthForm
+      title="Group Manager"
+      legend="Login Information"
+      submitLabel="Sign in"
+      submittingLabel="Signing in…"
+      submitting={submitting}
+      error={error}
+      onSubmit={handleSubmit}
+      maxWidth={480}
+      footer={
+        <p>
+          Don't have an account? <Link to="/signup">Sign up</Link>
+        </p>
+      }
+    >
+      <TextInput
+        id="username"
+        name="username"
+        type="text"
+        label="Username"
+        placeholder="Enter your username"
+        autoComplete="username"
+        required
+      />
+      <TextInput
+        id="password"
+        name="password"
+        type="password"
+        label="Password"
+        placeholder="Enter any password"
+        autoComplete="current-password"
+        required
+      />
+    </AuthForm>
   );
 }
