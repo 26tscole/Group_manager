@@ -1,15 +1,8 @@
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/hooks/useAuth';
 import { Center } from '@mantine/core';
 
-export function DashboardPage() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  async function handleLogout() {
-    await logout();
-    navigate('/login', { replace: true });
-  }
+export function UserDashboard() {
+  const { user } = useAuth();
 
   return (
     <main className="page-shell">
@@ -26,9 +19,6 @@ export function DashboardPage() {
           </p>
         </Center>
         <Center>
-          <button className="secondary-button" type="button" onClick={handleLogout}>
-            Sign out
-          </button>
         </Center>
       </section>
     </main>

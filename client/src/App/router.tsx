@@ -1,8 +1,10 @@
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { useAuth } from '../features/auth/hooks/useAuth';
 import { LoginPage } from '../features/auth/pages/LoginPage';
-import { DashboardPage } from '../features/user_dashboard/pages/DashboardPage';
+import { UserDashboard } from '../features/user_dashboard/pages/UserDashboard';
+import { GroupDashboard } from '../features/group_dashboard/pages/GroupDashboard';
 import { SignUpPage } from '../features/auth/pages/SignUp';
+import { BasicAppShell } from '../components/AppShell';
 
 
 function RequireAuth() {
@@ -19,7 +21,10 @@ export function AppRouter() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<RequireAuth />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/" element={<BasicAppShell />}>
+            <Route path="/user-dashboard" element={<UserDashboard />} />
+            <Route path="/group-dashboard" element={<GroupDashboard />} />
+          </Route>
         </Route>
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
