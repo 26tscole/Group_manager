@@ -6,7 +6,9 @@ import { SignUpPage } from '../features/auth/pages/SignUp';
 
 
 function RequireAuth() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
 
   return user ? <Outlet /> : <Navigate to="/login" replace />;
 }

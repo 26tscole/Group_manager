@@ -20,11 +20,6 @@ export type SignUpFormData = {
   address: string;
 };
 
-export type AuthSession = {
-  token: string;
-  user: AuthUser;
-};
-
 export type LoginCredentials = {
   username: string;
   password: string;

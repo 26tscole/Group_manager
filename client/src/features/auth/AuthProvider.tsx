@@ -1,10 +1,10 @@
-import { createContext, useState, type ReactNode } from 'react';
-import { loginRequest, signUpRequest } from './api';
+import { createContext, useEffect, useState, type ReactNode } from 'react';
+import { fetchCurrentUser, loginRequest, logoutRequest, signUpRequest } from './api';
 import type { AuthUser, LoginCredentials, SignUpFormData } from './types';
 
 type AuthContextValue = {
   user: AuthUser | null;
-  token: string | null;
+  loading: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   signUp: (signUpData: SignUpFormData) => Promise<void>;
   logout: () => Promise<void>;
@@ -18,27 +18,34 @@ type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Restore the session from the cookie on page load.
+  useEffect(() => {
+    fetchCurrentUser()
+      .then(setUser)
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false));
+  }, []);
 
   async function login(credentials: LoginCredentials) {
-    const session = await loginRequest(credentials);
-    setToken(session.token);
-    setUser(session.user);
+    setUser(await loginRequest(credentials));
   }
 
   async function signUp(signUpData: SignUpFormData) {
-    const session = await signUpRequest(signUpData);
-    setToken(session.token);
-    setUser(session.user);
+    setUser(await signUpRequest(signUpData));
   }
 
   async function logout() {
-    setToken(null);
-    setUser(null);
+    try {
+      await logoutRequest();
+    } finally {
+      setUser(null);
+    }
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, signUp, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, signUp, logout }}>
       {children}
     </AuthContext.Provider>
   );
