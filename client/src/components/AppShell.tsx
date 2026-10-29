@@ -14,7 +14,7 @@ export function BasicAppShell() {
     }
 
     const navItems = [
-        { label: 'User Dashboard', to: '/user-dashboard' },
+        { label: 'My Dashboard', to: '/user-dashboard' },
         { label: 'Group Dashboard', to: '/group-dashboard' },
     ];
 
