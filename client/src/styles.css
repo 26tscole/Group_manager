@@ -1,7 +1,19 @@
+@font-face {
+  font-family: 'GoodLookingFont';
+  src: url('/fonts/goodlookingfont.regular.otf') format('opentype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 body {
   min-height: 100vh;
   margin: 0;
   background-color: #f1f3f5;
+}
+
+.app-title {
+  font-family: 'GoodLookingFont', sans-serif;
 }
 
 #root {

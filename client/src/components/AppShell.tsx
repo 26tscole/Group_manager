@@ -1,4 +1,4 @@
-import { AppShell, Burger, Group, NavLink, Text } from '@mantine/core';
+import { AppShell, Burger, Group, NavLink, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../features/auth/hooks/useAuth';
@@ -27,14 +27,13 @@ export function BasicAppShell() {
             <AppShell.Header>
                 <Group h="100%" px="md">
                     <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-                    <Text
+                    <Title
                         size="xl"
                         fw={900}
-                        variant="gradient"
-                        gradient={{ from: 'teal', to: 'orange', deg: 90 }}
+                        className="app-title"
                     >
                         Group Manager
-                    </Text>
+                    </Title>
                 </Group>
             </AppShell.Header>
 
